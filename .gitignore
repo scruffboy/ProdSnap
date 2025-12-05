@@ -1,0 +1,9 @@
+# Virtual environment
+.venv/
+env/
+
+# Cache
+__pycache__/
+
+# VsCode settings
+.vscode
