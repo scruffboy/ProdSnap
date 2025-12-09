@@ -6,21 +6,25 @@ import os
 from datetime import datetime
 
 
-# Function
+def screenshoter(save_directory_screenshot="src/data/screenshots", interval_minutes=30):
+    """Creating/checking a directory for screenshots and creating screenshots at intervals"""
 
+    os.makedirs(
+        save_directory_screenshot, exist_ok=True
+    )  # Checking the directory. If the directory doesn't exist, create it.
 
-def screenshoter(
-    save_directory_screenshot="src/data/screenshots", interval_time_minutes=30
-):
-    """"""
-
-    #
-    os.makedirs(save_directory_screenshot, exist_ok=True)
     print(f"Directory for screenshots '{save_directory_screenshot}' exists.")
 
-    while True:
+    interval_seconds = interval_minutes * 60  # Convertion minutes to seconds
 
-        convertion_time = interval_time_minutes * 60
+    next_time = time.time() + interval_seconds  # Calculating the next screenshot time
+
+    while True:  # Iterations for creating screenshots
+
+        time_to_wait = next_time - time.time()
+
+        if time_to_wait > 0:
+            time.sleep(time_to_wait)
 
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         screenshot_name = f"screenshot_{timestamp}.jpg"
@@ -31,9 +35,16 @@ def screenshoter(
             screenshot_body.save(screenshot_path, quality=85)
             print(f"Screenshot {screenshot_name} was done.")
 
-            time.sleep(convertion_time)
-
         except KeyboardInterrupt:
             print(f"Program was closed.")
+            break
         except Exception as e:
             print(f"Error: {e}")
+            print(f"Screenshot was not taken.")
+            continue
+
+        next_time += interval_seconds
+
+
+if __name__ == "__main__":  # Entry point
+    screenshoter(save_directory_screenshot="src/data/screenshots", interval_minutes=1)
