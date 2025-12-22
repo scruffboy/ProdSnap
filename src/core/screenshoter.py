@@ -19,31 +19,32 @@ def screenshoter(save_directory_screenshot="src/data/screenshots", interval_minu
 
     next_time = time.time() + interval_seconds  # Calculating the next screenshot time
 
-    while True:  # Iterations for creating screenshots
+    try:
+        while True:  # Iterations for creating screenshots
 
-        time_to_wait = next_time - time.time()
+            time_to_wait = next_time - time.time()
 
-        if time_to_wait > 0:
-            time.sleep(time_to_wait)
+            if time_to_wait > 0:
+                time.sleep(time_to_wait)
 
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        screenshot_name = f"screenshot_{timestamp}.jpg"
-        screenshot_path = os.path.join(save_directory_screenshot, screenshot_name)
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            screenshot_name = f"screenshot_{timestamp}.jpg"
+            screenshot_path = os.path.join(save_directory_screenshot, screenshot_name)
 
-        try:
-            screenshot_body = pyautogui.screenshot()
-            screenshot_body.save(screenshot_path, quality=85)
-            print(f"Screenshot {screenshot_name} was done.")
+            try:
+                screenshot_body = pyautogui.screenshot()
+                screenshot_body.save(screenshot_path, quality=85)
+                print(f"Screenshot {screenshot_name} was done.")
 
-        except KeyboardInterrupt:
-            print(f"Program was closed.")
-            break
-        except Exception as e:
-            print(f"Error: {e}")
-            print(f"Screenshot was not taken.")
-            continue
+            except Exception as e:
+                print(f"Error: {e}")
+                print(f"Screenshot was not taken.")
+                continue
 
-        next_time += interval_seconds
+            next_time += interval_seconds
+
+    except KeyboardInterrupt:  # Ctrl + C - quit
+        print("Program was closed.")
 
 
 if __name__ == "__main__":  # Entry point
